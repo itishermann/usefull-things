@@ -1,0 +1,44 @@
+version: '3.7'
+services:
+  nextcloud:
+    image: nextcloud
+    networks:
+      - nextcloud
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloudrocks
+      POSTGRES_HOST: postgres
+      REDIS_HOST: redis
+      NEXTCLOUD_TRUSTED_DOMAINS: "mydomain.com 127.0.0.1 [My public IP]"
+      TRUSTED_PROXIES: "mydomain.com 127.0.0.1 [My public IP]"
+      OVERWRITEHOST: "mydomain.com"
+      OVERWRITEPROTOCOL: https
+    volumes:
+      - ./nextcloud-data:/var/www/html
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '127.0.0.1:80:80'
+  redis:
+    image: redis
+    networks:
+      - nextcloud
+    volumes:
+      - ./redis-data:/data
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_PASSWORD: nextcloudrocks
+      POSTGRES_USER: nextcloud
+    logging:
+      driver: none
+    restart: unless-stopped
+    networks:
+      - nextcloud
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+networks:
+  nextcloud: 
