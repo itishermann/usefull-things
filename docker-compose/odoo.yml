@@ -1,0 +1,22 @@
+version: '3'
+services:
+  web:
+    image: odoo
+    networks:
+      - odoo
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:80:8069"
+  db:
+    image: postgres
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+    networks:
+      - crm
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+networks:
+  odoo:
