@@ -1,0 +1,20 @@
+version: '3.3'
+services:
+    n8n:
+        container_name: n8n
+        user: "root"
+        ports:
+            - 127.0.0.1:443:8443
+        volumes:
+            - ./n8n-data:/root/.n8n
+        image: n8nio/n8n
+        environment:
+          N8N_HOST="mydomain.com"
+          N8N_PROTOCOL=https
+          N8N_PORT=8443
+          VUE_APP_URL_BASE_API="https://mydomain.com/"
+          WEBHOOK_TUNNEL_URL="https://mydomain.com"
+          N8N_BASIC_AUTH_ACTIVE=true
+          N8N_BASIC_AUTH_USER=change_me
+          N8N_BASIC_AUTH_PASSWORD=change_me
+          NODE_ENV=production
